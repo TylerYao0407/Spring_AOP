@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <bean id="userService" class="com.tyler.service.UserServiceImpl"/>
+    <!--公共业务-->
+    <bean id="before" class="com.tyler.log.Before"/>
+    <bean id="after" class="com.tyler.log.After"/>
+    <aop:config>
+        <!--告诉spring，公共的业务在哪些类上执行-->
+        <!--execution是一个表达式，第一个*代表所有返回值类型，后面指定执行那个方法 *表示所有方法后面的..表示所有形参-->
+        <aop:pointcut id="pointcut" expression="execution(* com.tyler.service.UserServiceImpl.*(..))"/>
+        <!--告诉spring 这些切入点要做哪些公共业务-->
+        <aop:advisor advice-ref="before" pointcut-ref="pointcut"/>
+        <aop:advisor advice-ref="after" pointcut-ref="pointcut"/>
+    </aop:config>
+</beans>
